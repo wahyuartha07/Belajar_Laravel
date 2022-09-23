@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('/stisla/css/components.css') }}">
 </head>
 
-<body>
+<body class="sidebar-mini">
     <div id="app">
         <div class="main-wrapper">
             <div class="navbar-bg"></div>
@@ -241,26 +241,14 @@
                 </ul>
             </nav>
             <div class="main-sidebar sidebar-style-2">
-                <aside id="sidebar-wrapper">
-                    <div class="sidebar-brand">
-                        <a href="index.html">Stisla</a>
-                    </div>
-                    <div class="sidebar-brand sidebar-brand-sm">
-                        <a href="index.html">St</a>
-                    </div>
-                    @include('layouts.menu')
-                    <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-                        <a href="https://getstisla.com/docs" class="btn btn-primary btn-lg btn-block btn-icon-split">
-                            <i class="fas fa-rocket"></i> Documentation
-                        </a>
-                    </div>
-                </aside>
+                @include('layouts.sidebar')
             </div>
 
             <!-- Main Content -->
             <div class="main-content">
                 @yield('content')
             </div>
+
             <footer class="main-footer">
                 <div class="footer-left">
                     Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauval.in/">Muhamad Nauval Azhar</a>
