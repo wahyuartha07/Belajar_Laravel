@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class ProductController extends Controller
 {
@@ -22,6 +23,7 @@ class ProductController extends Controller
                         ->orWhere('price', $request->search)
                         ->orWhere('quantity', $request->search)->get();
         
+
         return view('product.index', compact('products'));
     }
 
@@ -45,8 +47,8 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required',
-            'quantity' => 'required'
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
         ]);
 
         Product::create($request->all());
