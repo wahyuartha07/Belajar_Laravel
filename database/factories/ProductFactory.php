@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,13 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $price_buy = $this->faker->numberBetween(100, 1000);
         return [
-            //
+            'name' => fake()->word(),
+            'price_buy' => $price_buy,
+            'price_sell' => $price_buy + fake()->numberBetween(10, 20),
+            'quantity' => fake()->numberBetween(1, 100),
+            'rating' => fake()->numberBetween(10, 50)/10,
         ];
     }
 }

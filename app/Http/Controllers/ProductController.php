@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -18,13 +19,16 @@ class ProductController extends Controller
         $request->validate([
             'search' => 'nullable|string|max:255',
         ]);
-
+        $categories = Category::all();
         $products = Product::where('name', 'like', "%{$request->search}%")
-                        ->orWhere('price', $request->search)
-                        ->orWhere('quantity', $request->search)->get();
+                        ->orWhere('price_sell', $request->search)
+                        ->orWhere('quantity', $request->search)
+                        ->orderBy('rating', 'desc')
+                        ->orderBy('price_sell', 'asc')
+                        ->get();
         
 
-        return view('product.index', compact('products'));
+        return view('product.index', compact('products', 'categories'));
     }
 
     /**
@@ -47,10 +51,12 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required|numeric',
+            'price_buy' => 'required|numeric',
+            'price_sell' => 'required|numeric',
             'quantity' => 'required|numeric',
+            'category_id' => 'required|numeric',
         ]);
-
+        
         Product::create($request->all());
 
         return redirect()->route('products.index')

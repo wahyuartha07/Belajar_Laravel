@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title')
-Products
+Users
 @endsection
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Products</h1>
+        <h1>Users</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
             <div class="breadcrumb-item"><a href="#">Components</a></div>
@@ -16,7 +16,7 @@ Products
     </div>
 
     <div class="section-body">
-        <h2 class="section-title">Products</h2>
+        <h2 class="section-title">Users</h2>
         <p class="section-lead">Example of some Bootstrap table components.</p>
 
         <div class="row">
@@ -28,8 +28,8 @@ Products
                             <div>
                                 @can('product-create')
                                 <!-- <a class="btn btn-primary" href="{{ route('products.create') }}"> Create New Product</a> -->
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#create-product-modal">
-                                    <i class="fas fa-plus"></i> Create New Product</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#create-user-modal">
+                                    <i class="fas fa-plus"></i> Create New User</button>
                                 @endcan
                             </div>
                         </div>
@@ -52,35 +52,26 @@ Products
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Rating</th>
-                                        @canany(['product-edit', 'product-delete'])
+                                        <th>Role</th>
                                         <th>Action</th>
-                                        @endcan
                                     </tr>
-                                    @foreach($products as $product)
+                                    @foreach($users as $user)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $product->name }}</td>
-                                        <td>{{ $product->quantity }}</td>
-                                        <td>{{ $product->price_sell }}</td>
-                                        <td>{{ $product->rating }}</td>
-                                        @canany(['product-edit', 'product-delete'])
+                                        <td>{{ $user->name }}</td>
+                                        <td>@foreach($user->roles as $role) 
+                                            <label class="badge badge-info">{{ $role->name }}</label>
+                                            @endforeach
+                                        </td>
                                         <td>
-                                            @can('product-edit')
-                                            <button class="btn btn-primary" data-toggle="modal" data-target="#edit-product-{{ $product->id }}-modal">
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#edit-user-{{ $user->id }}-modal">
                                                 <i class="fas fa-pencil"></i> Edit</button>
-                                            @endcan
-                                            @can('product-delete')
-                                            <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
-                                            @endcan
-                                        </td>
-                                        @endcan
+                                        </td>   
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -110,31 +101,35 @@ Products
     </div>
 </section>
 
-@foreach($products as $product)
-<div class="modal fade" tabindex="-1" role="dialog" id="edit-product-{{ $product->id }}-modal" style="display: none;" aria-hidden="true">
+@foreach($users as $user)
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-user-{{ $user->id }}-modal" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Product</h5>
+                <h5 class="modal-title">Edit user</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('products.update', $product) }}" method="POST">
+            <form action="{{ route('users.update', $user) }}" method="POST">
                 @method('PUT')
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="name">Text</label>
-                        <input type="text" name="name" value="{{ $product->name }}" class="form-control form-control-sm">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" value="{{ $user->name }}" class="form-control form-control-sm">
                     </div>
                     <div class="form-group">
-                        <label>Price</label>
-                        <input type="text" name="price" value="{{ $product->price }}" class="form-control form-control-sm">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" value="{{ $user->email }}" class="form-control form-control-sm">
                     </div>
                     <div class="form-group">
-                        <label>Quantity</label>
-                        <input type="text" name="quantity" value="{{ $product->quantity }}" class="form-control form-control-sm">
+                        <label>Role</label>
+                        <select class="form-control" name="role">
+                            @foreach($roles as $role)
+                            <option value="{{ $role->name }}" {{ $user->roles->contains($role) ? 'selected' : '' }}>{{ $role->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
@@ -147,41 +142,37 @@ Products
 </div>
 @endforeach
 
-<div class="modal fade" tabindex="-1" role="dialog" id="create-product-modal" style="display: none;" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="create-user-modal" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Product</h5>
+                <h5 class="modal-title">Create user</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('products.store') }}" method="POST">
+            <form action="{{ route('users.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="name">Text</label>
+                        <label for="name">Name</label>
                         <input type="text" name="name" class="form-control form-control-sm">
                     </div>
                     <div class="form-group">
-                        <label>Price Buy</label>
-                        <input type="text" name="price_buy" class="form-control form-control-sm">
+                        <label>Email</label>
+                        <input type="text" name="email" class="form-control form-control-sm">
                     </div>
                     <div class="form-group">
-                        <label>Price Sell</label>
-                        <input type="text" name="price_sell" class="form-control form-control-sm">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control form-control-sm">
                     </div>
                     <div class="form-group">
-                        <label>Quantity</label>
-                        <input type="text" name="quantity" class="form-control form-control-sm">
-                    </div>
-                    <div class="form-group">
-                        <label>Category</label>
-                        <select name="category_id" class="form-control form-control-sm">
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        <label>Role</label>
+                        <select class="form-control" name="role">
+                            @foreach($roles as $role)
+                            <option value="{{ $role->name }}">{{ $role->name }}</option>
                             @endforeach
-                        </select>   
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">
@@ -192,11 +183,4 @@ Products
         </div>
     </div>
 </div>
-@endsection
-
-@section('libJS')
-<script src="{{ asset('assets/modules/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js') }}"></script>
-<script src="{{ asset('assets/modules/jquery-ui/jquery-ui.min.js') }}"></script>
 @endsection

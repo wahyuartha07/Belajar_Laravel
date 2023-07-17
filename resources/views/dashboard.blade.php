@@ -5,7 +5,7 @@
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Chart.JS</h1>
+        <h1>Dashboard</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
             <div class="breadcrumb-item"><a href="#">Modules</a></div>
@@ -22,7 +22,7 @@
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Doughnut Chart</h4>
+                        <h4>Top 5 Items Quantity</h4>
                     </div>
                     <div class="card-body">
                         <canvas id="doughnutChart" style="display: block; height: 274px; width: 548px;" class="chartjs-render-monitor" width="685" height="342"></canvas>
@@ -32,7 +32,7 @@
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Pie Chart</h4>
+                        <h4>Top 5 Items Margin</h4>
                     </div>
                     <div class="card-body">
                         <canvas id="pieChart" style="display: block; height: 274px; width: 548px;" class="chartjs-render-monitor" width="685" height="342"></canvas>

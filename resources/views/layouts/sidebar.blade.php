@@ -13,6 +13,14 @@
         <li class="{{ request()->routeIs('products.index') ? 'active' : '' }}">
             <a href="{{ route('products.index') }}" class="nav-link"><i class="fas fa-box"></i><span>Product</span></a>
         </li>
+        @role('admin')
+        <li class="{{ request()->routeIs('faq.index') ? 'active' : '' }}">
+            <a href="{{ route('faq.index') }}" class="nav-link"><i class="fas fa-question-circle"></i><span>FAQ</span></a>
+        </li>
+        <li class="{{ request()->routeIs('users.index') ? 'active' : '' }}">
+            <a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
+        </li>
+        @endrole
         <li><a class="nav-link" href="credits.html"><i class="fas fa-pencil-ruler"></i> <span>Credits</span></a></li>
     </ul>
     <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
