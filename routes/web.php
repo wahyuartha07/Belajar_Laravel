@@ -34,7 +34,7 @@ Route::get('/hello', [TestController::class, 'index']);
 
 
 Route::get('/', function () {
-    return view('landing');
+    return redirect()->route('login');
 })->name('landing');
 
 Route::get('/faqs', [FaqController::class, 'indexUser'])->name('faq.index-user');
