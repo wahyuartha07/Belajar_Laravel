@@ -33,7 +33,7 @@ Route::get('/tes', function() {
     return view('dashboard');
 })->name('tes');
 
-Route::get('/home', function() {
+Route::get('/home/landing2', function() {
     return view('home');
 });
 
